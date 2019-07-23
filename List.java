@@ -10,7 +10,7 @@ public interface List<T extends Comparable<T>>{
   public abstract T max();
   public abstract T maxR();
   public abstract boolean Empty();
-  public abstract void addAthead(T item);
+  public abstract void addAtHead(T item);
   public abstract void addAtEnd(T item);
   public abstract void replace(T first, T second);
   public abstract List<T> duplicate(T item);
