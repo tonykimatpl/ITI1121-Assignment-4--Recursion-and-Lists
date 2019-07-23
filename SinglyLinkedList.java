@@ -1,346 +1,451 @@
-public class SinglyLinkedList< T extends Comparable <T>> implements List<T>{
+public class SinglyLinkedList<T extends Comparable<T>> implements List<T>{
 
-  private static class Node<T>{
+	private Node<T> head;
+  private Node<T> tail;
 
-    private T value;
-    private Node <T> next;
+	private static class Node<T>{
+		private T value;
+		private Node<T> next;
 
-    private Node(T value, Node<T> next){
-      this.value = value;
-      this.next = next;
-    }
-  }
-  private Node<T> head;
-
-
-  public int size(){
-    return size(head);
-  }
-  private int size(Node<T> p){
-    if (p == null) {
-			return 0;
-		} else
-			return 1 + size(p.next);
-  }
-
-
-  public T get(int i){
-    if (i< 0){
-      throw new IllegalArgumentException("the argument implemented is smaller then 0 and does not exist in this list");
-    }
-    else{
-			return get(head, i);
-    }
-  }
-  private T get(Node<T> p, int index) {
-		if (index == 0) {
-			return p.value;
-		} else {
-			index = index - 1;
-			return get(p.next, index);
+		private Node(T value, Node<T> next){
+			this.value = value;
+			this.next = next;
 		}
 	}
 
+	public int size(){
+		if(head == null){
+			return 0;
+		}
+		else{
+			return size(head);
+		}
+	}
+	private int size(Node<T> p){
+		if(p == null){
+			return 0;
+		}
+		else{
+			return 1 + size(p.next);
+		}
+	}
 
-  public int indexOf(Object item){
-
-    Node<T> current = head;
-
-    if (item == null){
-      throw new IllegalArgumentException("the argument implemented null");
+	public T get(int i){
+    if(i<0){
+			return null;
+		}
+		if(head == tail && i == 0){
+      return head.value;
     }
     else{
-      return indexOf(item,current);
-    }
-  }
-
-  private int indexOf(Object item, Node<T> node){
-    Node<T> tmp = new Node<T>( (T) item,null);
-    if((node.equals(tmp)) == true){
-      return;
+      return get(head, i, 0);
+		}
+	}
+	private T get(Node<T> elem,int i, int currentindex){
+    Node<T> temp = elem;
+		if(currentindex == i){
+      return temp.value;
     }
     else{
-      return 1 + indexOf(item, node.next);
+      temp = temp.next;
+      currentindex++;
+    }
+    return get(temp,i,currentindex);
+	}
+
+	public int indexOf(Object item){
+    if(head == null || item == null){
+      return -1;
+    }
+    else{
+      return indexOf(item, head);
     }
   }
-
+  private int indexOf(Object item, Node<T> head){
+    if(head.value.compareTo((T) item) == 0){
+      return 0;
+    }
+    if(head.next == null){
+      return -1;
+    }
+    int index = indexOf(item, head.next);
+    if(index == -1){
+      return -1;
+    }
+    else{
+      return 1 + index;
+    }
+  }
 
   public void add(int i, T item){
-    if (i< 0){
-      throw new IllegalArgumentException("the argument implemented is smaller then 0 and does not exist in this list");
+    if(item == null){
+      throw new IllegalArgumentException("You cannot add a null element to this list.");
     }
-    if (item == null){
-      throw new IllegalArgumentException("the argument implemented null");
-    }
-    Node<T> tmp = new Node<T>(item,null);
-    if(head == null){
-      if(i != 0){
-        return;
+    else{
+      if(i<0 || i>size()){
+        throw new IllegalArgumentException("The index provided is not in the bounds of the list.");
       }
-      else{
-        head = tmp;
-      }
-    }
-    if(head != null && i == 0){
-      tmp.next = head;
-      head = tmp;
-      return;
-    }
-    Node<T> current = head;
-    Node<T> previous = null;
-
-    int j = 0;
-
-    while (j < i){
-      previous = current;
-      current = current.next;
-
-      if(current == null){
-        break;
-      }
-      j++;
-    }
-    tmp.next = current;
-    previous.next = tmp;
-  }
-
-
-  public T remove(int i){
-    if (i< 0){
-      throw new IllegalArgumentException("the argument implemented is smaller then 0 and does not exist in this list");
-    }
-    if (i> list.size()){
-      throw new IllegalArgumentException("the argument implemented is larger then the size of the list");
-    }
-    if (head != null) {
-      if (head.value.compareTo(get(i)) == 0) {
+      else if(i == 0 && head == tail){
         Node<T> temp = head;
-        temp.value = null;
-        temp.next = null;
-        head = head.next;
+        head = new Node<T>(item,temp);
+        tail = head.next;
+      }
+      else if(i == 0 && head != tail){
+        Node<T> temp = head;
+        head = new Node<T>(item, temp);
       }
       else{
-        remove(head, get(i));
+        Node<T> temp = new Node<T>(item, null);
+        Node<T> current = head;
+        Node<T> previous = null;
+        int index = 0;
+        while(index < i){
+          previous = current;
+          current = current.next;
+          if(current == null){
+            break;
+          }
+          index++;
+        }
+        temp.next = current;
+        previous.next = temp;
       }
     }
   }
-
-  private void remove(Node<T> p, T o) {
-    if (p.next == null) {
-      return; // we could not find o in the list
+  public T remove(int i){
+    int counter = 0;
+    T saved;
+    if(i < 0 || i > size()){
+      return null;
     }
-    if (p.next.value.compareTo(o) == 0) {
-      p.next = p.next.next;
-      return;
-    } else {
-      remove(p.next, o);
+    else{
+      if(head == null){
+        return null;
+      }
+      else if(head == tail){
+        saved = head.value;
+        head = tail = null;
+        return saved;
+      }
+      else{
+        Node<T> temp = head;
+     	  while(counter < i){
+          temp = temp.next;
+          counter++;
+        }
+        saved = temp.next.value;
+        temp.next = temp.next.next;
+      }
     }
-    ;
+    return saved;
   }
-
 
   public T min(){
-
-    //needs to be implemented
-
-    return head.value;
+    if(head == null){
+      return null;
+    }
+    else if(head == tail){
+      return head.value;
+    }
+    else{
+      Node<T> temp = head;
+      T currentmin = temp.value;
+      temp = temp.next;
+      int index = 0;
+      while(index < size()){
+        if(temp.value.compareTo(currentmin) < 0){
+          currentmin = temp.value;
+          temp = temp.next;
+          index++;
+        }
+        else{
+          index++;
+        }
+      }
+      return currentmin;
+    }
   }
 
-  public T minR() {
-
-		if (head == null) {
-			return null;
-		} else {
-			return MinR(head);
-
-		}
-	}
-
-	private T MinR(Node<T> p) {
-		if (p == null) {
-			return null;
-		}
-		T min = p.value;
-
-		while (p != null) {
-			if (p.value.compareTo(min) < 0) {
-				min = p.value;
-			}
-			p = p.next;
-		}
-		return min;
-	}
+  public T minR(){
+    if(head == null){
+      return null;
+    }
+    else if(head == tail){
+      return head.value;
+    }
+    else{
+      return minR(head);
+    }
+  }
+  private T minR(Node<T> p){
+    if(p.next == null){
+      return p.value;
+    }
+    T result = minR(p.next);
+    if(result.compareTo(p.value) < 0){
+      return result;
+    }
+    else{
+      return p.value;
+    }
+  }
 
   public T max(){
-
-    //needs to be implemented
-
-    return head.value;
+    if(head == null){
+      return null;
+    }
+    else if(head == tail){
+      return head.value;
+    }
+    else{
+      Node<T> temp = head;
+      T currentmax = temp.value;
+      temp = temp.next;
+      int index = 0;
+      while(index < size()-1){
+        if(temp.value.compareTo(currentmax) > 0){
+          currentmax = temp.value;
+          temp = temp.next;
+          index++;
+        }
+        else{
+          index++;
+        }
+      }
+      return currentmax;
+    }
   }
 
-
-  public T maxR() {
-
-		if (head == null) {
-			return null;
-		} else {
-			return MaxR(head);
-
-		}
-	}
-
-	private T MaxR(Node<T> p) {
-		if (p == null) {
-			return null;
-		}
-		T max = p.value;
-
-		while (p != null) {
-			if (p.value.compareTo(max) > 0) {
-				max = p.value;
-			}
-			p = p.next;
-		}
-		return max;
-	}
-
+  public T maxR(){
+    if(head == null){
+      return null;
+    }
+    else{
+      return maxR(head);
+    }
+  }
+  private T maxR(Node<T> p){
+    if(p.next == null){
+      return p.value;
+    }
+    T result = maxR(p.next);
+    if(result.compareTo(p.value) > 0){
+      return result;
+    }
+    else{
+      return p.value;
+    }
+  }
 
   public boolean Empty(){
-    return head==null;
+    if(head == null){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
-
 
   public void addAtHead(T item){
-		if (item == null) {
-			throw new NullPointerException("Illegal argument");
-		}
-
-		head = new Node<T>(item, head);
-	}
+    if(head == null){
+      tail = head = new Node<T>(item, null);
+    }
+    else{
+      Node<T> temp = head;
+      head = new Node<T>(item, temp);
+    }
+  }
 
   public void addAtEnd(T item){
-    if (item == null) {
-			throw new NullPointerException("Illegal argument");
-		}
-    Node <T>  tmp = head;
-    while(tmp.value != null){
-      tmp = tmp.next;
+    if(head == null){
+      head = tail = new Node<T>(item,null);
     }
-    Node<T> last;
-		last = new Node<T>(item, tmp);
+    else{
+      Node<T> temp = head;
+      Node<T> newtail = new Node<T>(item,null);
+      while(temp.next != null){
+        temp = temp.next;
+      }
+      temp.next = newtail;
+      tail = temp;
+    }
   }
-
 
   public void replace(T first, T second){
-    System.out.println(first);
-
-    //needs to be implemented
+    if(first == null || second == null || head == null){
+      return ;
+    }
+    else if(head == tail){
+      if(head.value.compareTo(first) == 0){
+        head.value = second;
+      }
+      else{
+        return ;
+      }
+    }
+    else{
+      Node<T> p = head;
+      while(p.next != null){
+        if(p.value.compareTo(first) == 0){
+          p.value = second;
+        }
+        p = p.next;
+      }
+    }
   }
 
-
-  public List<T> duplicate(T item) {
-		return duplicate(item, head);
-	}
-
-	private List<T> duplicate(T item, Node<T> node) {
-		if (node == null)
-			return new SinglyLinkedList<T>();
-		else {
-			SinglyLinkedList<T> result = new SinglyLinkedList<>();
-			result = (SinglyLinkedList<T>) duplicate(item, node.next);
-
-			if (node.value.compareTo(item) == 0) {
-				result.addAtHead(item);
-			} else {
-				result.addAtHead(node.value);
-			}
-
-			return result;
-		}
-	}
-
+  public List<T> duplicate(T item){
+    if(head == null){ //if list is empty return null
+      return null;
+    }
+    else if(head.value.compareTo(item) == 0 && head == tail){
+      head.next = new Node<T>(item, null);
+      tail = head.next;
+      return this;
+    }
+    else{
+      duplicate(item, head);
+    }
+    return null;
+  }
+  private List<T> duplicate(T item, Node<T> p){
+    if(p == null){
+      return new SinglyLinkedList<T>();
+    }
+    else{
+      SinglyLinkedList<T> duplist = new SinglyLinkedList<T>();
+      duplist = (SinglyLinkedList<T>) duplicate(item, p.next);
+      if(p.value.compareTo(item) == 0){
+        duplist.addAtHead(item);
+      }
+      else{
+        duplist.addAtHead(p.value);
+      }
+      return duplist;
+    }
+  }
 
   public void reverse(){
-    System.out.println("lol");
+    reverse(head);
+  }
+  private void reverse(Node<T> p){
+    if(p == null){
+      return;
+    }
+    else{
+      reverse(p.next);
+      System.out.print(p.value +", ");
+    }
   }
 
-
   public List<T> countGreaterThan(T threshold){
-		return storeGreaterThan(threshold, head);
-	}
-
-	private List<T> storeGreaterThan(T threshold, Node<T> node) {
-		if (node == null)
-			return new SinglyLinkedList<T>();
-		else {
-			SinglyLinkedList<T> result = new SinglyLinkedList<>();
-			result = (SinglyLinkedList<T>) storeGreaterThan(threshold, node.next);
-			if (node.value.compareTo(threshold) > 0) {
-				result.addAtHead(node.value);
-			}
-			return result;
-		}
-
-	}
-
-
-  public boolean equals(Object other){
-		if (!(other instanceof List<?>)) {
-			return false;
-		}
-		if (other == this) {
-			return true;
-		} else
-			return equals((List<?>) other);
-	}
-
-	public boolean equals(List<T> other) {
-		return equals(this.head, other.head);
-	}
-
-	private boolean equals(Node<T> p, Node<T> q) {
-		if (p == null) {
-			if (q == null) {
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			if (p.value.compareTo(q.value) == 0)
-				return equals(p.next, q.next);
-			else{
-        return false;
+    if(head == null){
+      return null;
+    }
+    else if(head == tail){
+      if(head.value.compareTo(threshold) <= 0){
+        return null;
       }
-		}
-	}
+      else{
+        return this;
+      }
+    }
+    else{
+      return countGreaterThan(threshold, head);
+    }
+  }
+  private List<T> countGreaterThan(T threshold, Node<T> p){
+    List<T> list;
+    if(p.value.compareTo(threshold) <= 0){
+      p = p.next;
+    }
+    if(p == null){
+      list = new SinglyLinkedList<T>();
+    }
+    else{
+      list = countGreaterThan(threshold, p.next);
+      if(p.value.compareTo(threshold) > 0){
+        list.addAtEnd(p.value);
+      }
+    }
+    return list;
+  }
+
+  public boolean equals(SinglyLinkedList other){
+    if(this.head == null && other.head == null){
+      return true;
+    }
+    else if(this.head.value.compareTo((T) other.head.value) == 0 && this.head == this.tail && other.head == other.tail){
+      return true;
+    }
+    else{
+      equals(this, other);
+    }
+    return false;
+  }
+  private Boolean equals(SinglyLinkedList athis, SinglyLinkedList aother){
+    if(athis.head.next == null && aother.head.next == null && athis.head.value == aother.head.value){
+      return true;
+    }
+    if(athis.head.value == aother.head.value){
+      SinglyLinkedList<T> newthis = new SinglyLinkedList<T>();
+      SinglyLinkedList<T> newother = new SinglyLinkedList<T>();
+      Node<T> newthishead = athis.head.next;
+      Node<T> newotherhead = aother.head.next;
+      newthis.head = newthishead;
+      newother.head = newotherhead;
+      equals(newthis, newother);
+    }
+    else{
+      return false;
+    }
+    return false;
+  }
 
   public String toString(){
-		return "{" + (mytoString(head)) + "}";
-	}
-
-	private String mytoString(Node<T> p) {
-		String result = "";
-		if (p != null) {
-			if (p.next != null) {
-				result = p.value + "," + mytoString(p.next);
-			} else {
-				result = "" + p.value;
-
-			}
-
-		}
-
-		return result;
-	}
+    return toString(head);
+  }
+  private String toString(Node<T> p){
+    if(p == null){
+      return "";
+    }
+    else{
+      return toString(p.next) + p.value;
+    }
+  }
 
   public List<T> inorder(){
-    return null;
+    SinglyLinkedList<T> newlist = new SinglyLinkedList<T>();
+    newlist.head = this.head;
+    if(head == null){
+      return null;
+    }
+    else{
+      for(int i=0 ; i< this.size(); i++){
+        newlist.addAtEnd(min());
+        remove(indexOf(min()));
+      }
+    }
+    return newlist;
   }
 
   public void removeEven(){
-    for(int i; i < size(head);i++){
-      if(get(i)%2 != 1){
-        remove(i);
+    if(head == null){
+      return;
+    }
+    else if(head == tail){
+      head = tail = null;
+    }
+    else{
+      int index = 0;
+      while(index < this.size()){
+        if(index % 2 == 0){
+          this.remove(index);
+          index++;
+        }
+        if(index % 2 == 1){
+          index++;
+        }
       }
     }
   }
