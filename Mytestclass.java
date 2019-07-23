@@ -87,8 +87,8 @@ public class Mytestclass{
 	  System.out.println("List 1 after reverse():"+list1);
 	  System.out.println("List 2 after reverse():"+list2);
 
-    list1.countGreaterThan(0);
-	  list2.countGreaterThan(0);
+    System.out.println("Elements greater than 2 in list 1: " + list1.countGreaterThan(2));
+    System.out.println("Elements greater than 2 in list 2: " + list2.countGreaterThan(2));
 	  System.out.println("List 1 after countGreaterThan():"+list1);
 	  System.out.println("List 2 after countGreaterThan():"+list2);
 

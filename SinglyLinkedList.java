@@ -306,23 +306,22 @@ public class SinglyLinkedList<T extends Comparable<T>> implements List<T>{
     else{
       duplicate(item, head);
     }
-    return null;
+    return duplicate(item, head);
   }
   private List<T> duplicate(T item, Node<T> p){
     if(p == null){
-      return new SinglyLinkedList<T>();
+      return this;
+    }
+    if(p.value.compareTo(item) == 0){
+      SinglyLinkedList<T> duplist = new SinglyLinkedList<T>();
+      duplist.head = new Node<T>(item, p.next.next);
+      p.next = duplist.head;
+      duplicate(item, p.next.next.next);
     }
     else{
-      SinglyLinkedList<T> duplist = new SinglyLinkedList<T>();
-      duplist = (SinglyLinkedList<T>) duplicate(item, p.next);
-      if(p.value.compareTo(item) == 0){
-        duplist.addAtHead(item);
-      }
-      else{
-        duplist.addAtHead(p.value);
-      }
-      return duplist;
+      duplicate(item, p.next);
     }
+    return this;
   }
 
   public void reverse(){
@@ -330,15 +329,16 @@ public class SinglyLinkedList<T extends Comparable<T>> implements List<T>{
   }
   private void reverse(Node<T> p){
     if(p == null){
-      return;
+      System.out.println();
     }
     else{
+      System.out.print(p.value);
       reverse(p.next);
-      System.out.print(p.value +", ");
     }
   }
 
   public List<T> countGreaterThan(T threshold){
+    SinglyLinkedList<T> initlist = new SinglyLinkedList<T>();
     if(head == null){
       return null;
     }
@@ -351,24 +351,31 @@ public class SinglyLinkedList<T extends Comparable<T>> implements List<T>{
       }
     }
     else{
-      return countGreaterThan(threshold, head);
+      return countGreaterThan(threshold, head, initlist);
     }
   }
-  private List<T> countGreaterThan(T threshold, Node<T> p){
-    List<T> list;
-    if(p.value.compareTo(threshold) <= 0){
-      p = p.next;
+  private List<T> countGreaterThan(T threshold, Node<T> p, SinglyLinkedList<T> thresholdlist){
+    if(thresholdlist.Empty() == true && p.value.compareTo(threshold) > 0){ //if new list is empty and p.value is greater than the threshold, add a head to the new list containing p.value
+      thresholdlist.head = new Node<T>(p.value,null);
+      thresholdlist.tail = thresholdlist.head;
+      countGreaterThan(threshold,p.next,thresholdlist);
+    }
+    else if(thresholdlist.head == thresholdlist.tail && p.value.compareTo(threshold) > 0 && thresholdlist.indexOf(p.value) == -1){ //if new list contains one element and p.value is greater than the threshold, newlist.head.next contains p.value and points to tail
+      thresholdlist.head.next = new Node<T>(p.value, null);
+      thresholdlist.tail = thresholdlist.head.next;
+      countGreaterThan(threshold,p.next,thresholdlist);
+    }
+    else if(thresholdlist.size() > 2 && p.value.compareTo(threshold) > 0 && thresholdlist.indexOf(p.value) == -1){ //if new list contains more than 2 elements and p.value is greater than the threshold, and the new list doesnt already contain p.value, add p.value to list
+      thresholdlist.tail.next = new Node<T>(p.value, null);
+      countGreaterThan(threshold, p.next, thresholdlist);
+    }
+    else if(thresholdlist.size() > 2 && p.value.compareTo(threshold) > 0 && thresholdlist.indexOf(p.value) != -1){
+      countGreaterThan(threshold, p.next, thresholdlist);
     }
     if(p == null){
-      list = new SinglyLinkedList<T>();
+      return thresholdlist;
     }
-    else{
-      list = countGreaterThan(threshold, p.next);
-      if(p.value.compareTo(threshold) > 0){
-        list.addAtEnd(p.value);
-      }
-    }
-    return list;
+    return countGreaterThan(threshold, p.next, thresholdlist);
   }
 
   public boolean equals(SinglyLinkedList other){
