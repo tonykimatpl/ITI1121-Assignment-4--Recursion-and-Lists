@@ -1,33 +1,40 @@
+/*Mytestclass.java
+Noël Khalaf, Tony Kim
+300079144, 300087407
+ITI1121
+*/
+/*Mytestclass class contains a main class which tests the methods in the SinglyLinkedList class*/
 public class Mytestclass{
+  /*Main method executes the method calls to test each method in the SinglyLinkedList class*/
   public static void main(String args[]){
     List<Integer> list1 = new SinglyLinkedList<Integer>();
-	  List<Integer> list2 = new SinglyLinkedList<Integer>();
+	  List<Integer> list2 = new SinglyLinkedList<Integer>();			//Creates two SinglyLinkedLists of integers
     for(int i=0; i<10; i++){
-		    list1.add(i,i);
+		    list1.add(i,i);				//Adds integers from 0 to 9 to each list
         list2.add(i,i);
       }
 
-    System.out.println("List 1 after add():"+list1);
+    System.out.println("List 1 after add():"+list1);		//Displays lists after add() is called
 	  System.out.println("List 2 after add():"+list2);
 
-	  System.out.println("Size of list 1: "+ list1.size());
+	  System.out.println("Size of list 1: "+ list1.size());		//Displays results after size() is called
 	  System.out.println("Size of list 2: "+ list2.size());
-	  System.out.println("List 1 after size():"+list1);
+	  System.out.println("List 1 after size():"+list1);			//Displays lists after size() is called
 	  System.out.println("List 2 after size():"+list2);
 
-	  System.out.println("Element at index 0 in list 1: " + list1.get(0));
+	  System.out.println("Element at index 0 in list 1: " + list1.get(0));		//Displays results after get() is called
 	  System.out.println("Element at index 4 in list 2: " + list2.get(4));
-	  System.out.println("List 1 after get():"+list1);
+	  System.out.println("List 1 after get():"+list1);							//Displays lists after get() is called
 	  System.out.println("List 2 after get():"+list2);
 
-	  System.out.println("Index of element 1 in list 1: " + list1.indexOf(0));
-	  System.out.println("Index of element 2 in list 2: " + list2.indexOf(4));
-	  System.out.println("List 1 after indexOf():"+list1);
+	  System.out.println("Index of element 1 in list 1: " + list1.indexOf(0));		//Displays results after indexOf() is called
+	  System.out.println("Index of element 4 in list 2: " + list2.indexOf(4));
+	  System.out.println("List 1 after indexOf():"+list1);							//Displays lists after indexOf() is called
 	  System.out.println("List 2 after indexOf():"+list2);
 
-	  list1.remove(0);
+	  list1.remove(0);										//Removes first element in each list
 	  list2.remove(0);
-	  System.out.println("List 1 after remove():"+list1);
+	  System.out.println("List 1 after remove():"+list1);		//
 	  System.out.println("List 2 after remove():"+list2);
 
 	  System.out.println("Minimum of List 1: " + list1.min());
@@ -87,12 +94,12 @@ public class Mytestclass{
 	  System.out.println("List 1 after reverse():"+list1);
 	  System.out.println("List 2 after reverse():"+list2);
 
-    System.out.println("Elements greater than 2 in list 1: " + list1.countGreaterThan(2));
+    System.out.println("Elements greater than 5 in list 1: " + list1.countGreaterThan(5));
     System.out.println("Elements greater than 2 in list 2: " + list2.countGreaterThan(2));
 	  System.out.println("List 1 after countGreaterThan():"+list1);
 	  System.out.println("List 2 after countGreaterThan():"+list2);
 
-	  list1.equals(list2);
+	  System.out.println("Both lists equal each other: "+list1.equals(list2));
 	  System.out.println("List 1 after equals():"+list1);
 	  System.out.println("List 2 after equals():"+list2);
 
