@@ -32,7 +32,8 @@ public class Mytestclass{
 	  System.out.println("List 1 after indexOf():"+list1);							//Displays lists after indexOf() is called
 	  System.out.println("List 2 after indexOf():"+list2);
 
-	  list1.remove(0);										//Removes first element in each list
+	  list1.remove(0);
+    System.out.println("Removing index 0 from list1 and list2...");									//Removes first element in each list
 	  list2.remove(0);
 	  System.out.println("List 1 after remove():"+list1);		//
 	  System.out.println("List 2 after remove():"+list2);

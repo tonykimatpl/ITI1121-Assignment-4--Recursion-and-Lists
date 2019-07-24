@@ -112,7 +112,7 @@ public class SinglyLinkedList<T extends Comparable<T>> implements List<T>{
       }
     }
   }
-  public T remove(int i){
+	public T remove(int i){
     int counter = 0;
     T saved;
     if(i < 0 || i > size()){
@@ -337,8 +337,8 @@ public class SinglyLinkedList<T extends Comparable<T>> implements List<T>{
       System.out.println();
     }
     else{
-      System.out.print(p.value);
       reverse(p.next);
+			System.out.print(p.value);
     }
   }
 
@@ -371,7 +371,7 @@ public class SinglyLinkedList<T extends Comparable<T>> implements List<T>{
 	  }
 	  return result;
   }
-  
+
   public boolean equals(SinglyLinkedList other){
     if(this.head == null && other.head == null){
       return true;
@@ -416,19 +416,26 @@ public class SinglyLinkedList<T extends Comparable<T>> implements List<T>{
   }
 
   public List<T> inorder(){
-    SinglyLinkedList<T> newlist = new SinglyLinkedList<T>();
-    newlist.head = this.head;
-    if(head == null){
-      return null;
-    }
-    else{
-      while(!this.Empty() && this.head != null){
-        newlist.addAtHead(this.min());
-        this.remove(this.indexOf(this.min()));
-      }
-    }
-    return newlist;
+    SinglyLinkedList<T> templist = new SinglyLinkedList<T>();
+    templist = this;
+		SinglyLinkedList<T> sortedlist = new SinglyLinkedList<T>();
+		while(templist.head != null){
+			if(sortedlist.Empty() == true){ //if the sorted list is empty, made a new head in sorted list with the value of the head in templist
+				sortedlist.head = new Node<T>(templist.head.value,null);
+				templist.head = templist.head.next;
+			}
+			else if(sortedlist.Empty() == false && templist.head.value.compareTo(sortedlist.head.value) > 0){
+				sortedlist.addAtEnd(templist.head.value);
+				templist.head = templist.head.next;
+			}
+			else if(sortedlist.Empty() == false && templist.head.value.compareTo(sortedlist.head.value) < 0){
+				sortedlist.addAtHead(templist.head.value);
+				templist.head = templist.head.next;
+			}
+		}
+		return sortedlist;
   }
+
 
   public void removeEven(){
     if(head == null){
