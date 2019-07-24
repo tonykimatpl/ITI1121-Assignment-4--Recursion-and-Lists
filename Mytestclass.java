@@ -104,8 +104,8 @@ public class Mytestclass{
 	  System.out.println("List 1 after equals():"+list1);
 	  System.out.println("List 2 after equals():"+list2);
 
-	  list1.inorder();
-	  list2.inorder();
+	  System.out.println("List 1 sorted: " + list1.inorder());
+	  System.out.println("List 2 sorted: " + list2.inorder());
 	  System.out.println("List 1 after inorder():"+list1);
 	  System.out.println("List 2 after inorder():"+list2);
 
