@@ -127,6 +127,11 @@ public class SinglyLinkedList<T extends Comparable<T>> implements List<T>{
         head = tail = null;
         return saved;
       }
+	  else if(i == 0){
+		  saved = head.value;
+		  head = head.next;
+		  return saved;
+	  }
       else{
         Node<T> temp = head;
      	  while(counter < i){
@@ -417,7 +422,7 @@ public class SinglyLinkedList<T extends Comparable<T>> implements List<T>{
       return null;
     }
     else{
-      while(!this.Empty() && this.head.next != null){
+      while(!this.Empty() && this.head != null){
         newlist.addAtHead(this.min());
         this.remove(this.indexOf(this.min()));
       }
